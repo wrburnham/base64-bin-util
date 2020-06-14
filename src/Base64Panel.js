@@ -3,6 +3,8 @@ import { toast } from 'react-toastify';
 import { Tabs, Tab } from '@material-ui/core';
 import TabPanel from './TabPanel.js';
 import AppBar from '@material-ui/core/AppBar';
+import Base64ToBin from './Base64ToBin';
+import BinToBase64 from './BinToBase64';
 
 class Base64Panel extends React.Component {
 
@@ -26,10 +28,10 @@ class Base64Panel extends React.Component {
                     </Tabs>
                 </AppBar>
                 <TabPanel value={this.state.value} index={0}>
-                    Item 1
+                    <Base64ToBin/>
                 </TabPanel>
                 <TabPanel value={this.state.value} index={1}>
-                    Item 2
+                    <BinToBase64/>
                 </TabPanel>
             </>
         );
