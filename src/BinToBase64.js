@@ -23,6 +23,7 @@ class BinToBase64 extends React.Component {
         } else if (files.length !== 1) {
             toast.error('Cannot process multiple files.');
         } else {
+            toast.info('Converting...');
             const file = files[0];
             const reader = new FileReader();
             const callback = data => {
