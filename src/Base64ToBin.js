@@ -3,35 +3,32 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import { toast } from 'react-toastify';
 
 class Base64ToBin extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { b64: '', downloadLink: '', canConvert: false, canDownload: false };
-        this.handleConvert = this.handleConvert.bind(this);
-        this.updateBase64 = this.updateBase64.bind(this);
+        this.state = { downloadLink: '', actionEnabled: false };
+        this.update = this.update.bind(this);
     }
 
-    updateBase64(event) {
+    update(event) {
+        this.setState({actionEnabled: false});
         const input = event.target.value;
-        const validationResult = this.isValid(input);
-        this.setState({b64: input, canConvert: validationResult, canDownload: false});
-    }
-
-    isValid(input) {
-        const empty = input === null || input === '' || input.trim() === '';
-        // todo add more validation
-        return !empty;
-    }
-
-    handleConvert() {
+        let decoded = '';
         try {
-            const link = this.downloadLink(this.binOfB64());
-            this.setState({downloadLink: link, canDownload: true, canConvert: false});
+            decoded = atob(input);
         } catch (e) {
-            // todo toast
-            console.log(e);
+            toast.error("Invalid input.");
+            decoded = '';
+        }
+        if (decoded !== '') {
+            const link = this.downloadLink(this.toBin(decoded));
+            if (this.state.downloadLink !== '') {
+                window.URL.revokeObjectURL(this.state.downloadLink);
+            }
+            this.setState({downloadLink: link, actionEnabled: true});
         }
     }
 
@@ -42,13 +39,12 @@ class Base64ToBin extends React.Component {
         return window.URL.createObjectURL(blob);
     }
 
-    binOfB64() {
-        const raw = atob(this.state.b64);
-        const bytes = new Array(raw.length);
+    toBin(raw) {
+        const bytes = new Uint8Array(raw.length);
         for (let i = 0; i < raw.length; i++) {
             bytes[i] = raw.charCodeAt(i);
         }
-        return new Uint8Array(bytes);
+        return bytes;
     }
 
     render() {
@@ -68,22 +64,15 @@ class Base64ToBin extends React.Component {
                         fullWidth
                         size='medium'
                         placeholder='Paste some base 64 text here'
-                        onChange={this.updateBase64}/>
+                        onChange={this.update}/>
                 </Box>
                 <Box {...marginProps}>
                     <Button 
                         color='primary' 
                         variant='contained' 
-                        disabled={!this.state.canConvert}
-                        onClick={this.handleConvert}>
-                        <Typography>Convert</Typography>
-                    </Button>
-                    <Button
-                        color='secondary'
-                        variant='contained'
+                        disabled={!this.state.actionEnabled}
                         href={this.state.downloadLink}
-                        download='binary'
-                        disabled={!this.state.canDownload}>
+                        download='binary'>
                         <Typography>Download</Typography>
                     </Button>
                 </Box>
