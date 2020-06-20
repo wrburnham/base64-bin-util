@@ -23,15 +23,15 @@ class Base64Panel extends React.Component {
             <>
                 <AppBar position='static'>
                     <Tabs value={this.state.value} onChange={this.handleChange}>
-                        <Tab label='b64 to bin'></Tab>
                         <Tab label='bin to b64'></Tab>
+                        <Tab label='b64 to bin'></Tab>
                     </Tabs>
                 </AppBar>
                 <TabPanel value={this.state.value} index={0}>
-                    <Base64ToBin/>
+                    <BinToBase64/>
                 </TabPanel>
                 <TabPanel value={this.state.value} index={1}>
-                    <BinToBase64/>
+                    <Base64ToBin/>
                 </TabPanel>
             </>
         );

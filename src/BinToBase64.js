@@ -13,6 +13,8 @@ class BinToBase64 extends React.Component {
         this.state = {
             output: ''
         };
+        this.outputTextId = 'outputTextId';
+        this.copyToClipboard = this.copyToClipboard.bind(this);
     }
 
     handleAccepted(files) {
@@ -21,9 +23,11 @@ class BinToBase64 extends React.Component {
         } else if (files.length !== 1) {
             toast.error('Cannot process multiple files.');
         } else {
+            const file = files[0];
             const reader = new FileReader();
             const callback = data => {
                 this.setState({output: data});
+                toast.info(`Converted ${file.name} to base64.`);
             };
             reader.onload = function() {
                 try {
@@ -35,12 +39,15 @@ class BinToBase64 extends React.Component {
                     toast.error('Invalid input.');
                 }
             }
-            reader.readAsArrayBuffer(files[0]);
+            reader.readAsArrayBuffer(file);
         }
     }
 
     copyToClipboard(event) {
-        
+        document.getElementById(this.outputTextId).select();
+        document.execCommand('copy');
+        event.target.focus();
+        toast.info('Copied base64 text to clipboard.');
     }
 
     render() {
@@ -93,7 +100,7 @@ class BinToBase64 extends React.Component {
                 </Box>
                 <Box {...marginProps}>
                     <TextField
-                        id='b64-output'
+                        id={this.outputTextId}
                         multiline 
                         rows={4}
                         rowsMax={4} 
