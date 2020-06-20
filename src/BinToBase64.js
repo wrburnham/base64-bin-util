@@ -37,7 +37,8 @@ class BinToBase64 extends React.Component {
                         new Uint8Array(this.result)));
                     callback(b64);
                 } catch (e) {
-                    toast.error('Invalid input.');
+                    toast.error(`Error: ${e.message}`);
+                    console.error(e);
                 }
             }
             reader.readAsArrayBuffer(file);

@@ -20,7 +20,8 @@ class Base64ToBin extends React.Component {
         try {
             decoded = atob(input);
         } catch (e) {
-            toast.error('Invalid input.');
+            toast.error(`Error: ${e.message}`);
+            console.error(e);
             decoded = '';
         }
         if (decoded !== '') {
