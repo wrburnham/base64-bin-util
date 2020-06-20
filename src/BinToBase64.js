@@ -32,12 +32,15 @@ class BinToBase64 extends React.Component {
                         new Uint8Array(this.result)));
                     callback(b64);
                 } catch (e) {
-                    console.log(e);
                     toast.error('Invalid input.');
                 }
             }
             reader.readAsArrayBuffer(files[0]);
         }
+    }
+
+    copyToClipboard(event) {
+        
     }
 
     render() {
@@ -58,6 +61,12 @@ class BinToBase64 extends React.Component {
                   marginTop: '2rem'
                 }
           };
+          const dropzoneBoxMarginProps = {
+              style: {
+                  marginBottom: '1rem',
+                  marginTop: '1rem'
+              }
+          }
           const dropzoneTextProps = {
               style: {
                   paddingBottom: '1rem',
@@ -66,7 +75,7 @@ class BinToBase64 extends React.Component {
             };
         return (
             <div>
-                <Box {...marginProps}>
+                <Box {...dropzoneBoxMarginProps}>
                     <Dropzone onDrop={files => this.handleAccepted(files)}>
                         {({getRootProps, getInputProps}) => (
                         <section>
@@ -82,8 +91,9 @@ class BinToBase64 extends React.Component {
                         )}
                     </Dropzone>
                 </Box>
-                <Box>
+                <Box {...marginProps}>
                     <TextField
+                        id='b64-output'
                         multiline 
                         rows={4}
                         rowsMax={4} 
@@ -92,6 +102,15 @@ class BinToBase64 extends React.Component {
                         placeholder='Output'
                         value={this.state.output}
                         InputProps={{readOnly:true}}/>
+                </Box>
+                <Box {...marginProps}>
+                    <Button 
+                        color='primary' 
+                        variant='contained'
+                        disabled={this.state.output === ''} 
+                        onClick={this.copyToClipboard}>
+                            <Typography>Copy</Typography>
+                    </Button>
                 </Box>
             </div>
         );
