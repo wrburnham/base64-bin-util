@@ -32,10 +32,13 @@ class BinToBase64 extends React.Component {
             };
             reader.onload = function() {
                 try {
-                    const b64 = btoa(String.fromCharCode.apply(
-                        null, 
-                        new Uint8Array(this.result)));
-                    callback(b64);
+                    const bytes = new Uint8Array(this.result);
+                    const len = bytes.byteLength;
+                    let bin = '';
+                    for (let i = 0; i < len; i++) {
+                        bin += String.fromCharCode(bytes[i]);
+                    }
+                    callback(bin);
                 } catch (e) {
                     toast.error(`Error: ${e.message}`);
                     console.error(e);
