@@ -18,9 +18,10 @@ class Base64ToBin extends React.Component {
         const input = event.target.value;
         let decoded = '';
         try {
+            toast.info('Converting...', { toastId: 'toast-converting-b64tobin' });
             decoded = atob(input);
         } catch (e) {
-            toast.error(`Error: ${e.message}`);
+            toast.error(`Error: ${e.message}`, { toastId: 'toast-error-b64tobin' });
             console.error(e);
             decoded = '';
         }
@@ -29,6 +30,7 @@ class Base64ToBin extends React.Component {
             if (this.state.downloadLink !== '') {
                 window.URL.revokeObjectURL(this.state.downloadLink);
             }
+            toast.info('Converted', { toastId: 'toast-converted-b64tobin' });
             this.setState({downloadLink: link, actionEnabled: true});
         }
     }

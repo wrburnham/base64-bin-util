@@ -19,16 +19,16 @@ class BinToBase64 extends React.Component {
 
     handleAccepted(files) {
         if (files.length === 0) {
-            toast.error('No file specified.');
+            toast.error('No file specified.', { toastId: 'toast-error-no-file-bintob64' });
         } else if (files.length !== 1) {
-            toast.error('Cannot process multiple files.');
+            toast.error('Cannot process multiple files.', { toastId: 'toast-error-multiple-files-bintob64' });
         } else {
-            toast.info('Converting...');
+            toast.info('Converting...', { toastId: 'toast-converting-bintob64' });
             const file = files[0];
             const reader = new FileReader();
             const callback = data => {
                 this.setState({output: data});
-                toast.info(`Converted ${file.name} to base64.`);
+                toast.info(`Converted ${file.name} to base64.`, { toastId: 'toast-converted-bintob64' });
             };
             reader.onload = function() {
                 try {
@@ -40,7 +40,7 @@ class BinToBase64 extends React.Component {
                     }
                     callback(btoa(bin));
                 } catch (e) {
-                    toast.error(`Error: ${e.message}`);
+                    toast.error(`Error: ${e.message}`, { toastId: 'toast-error-bintob64' });
                     console.error(e);
                 }
             }
@@ -52,7 +52,7 @@ class BinToBase64 extends React.Component {
         document.getElementById(this.outputTextId).select();
         document.execCommand('copy');
         event.target.focus();
-        toast.info('Copied base64 text to clipboard.');
+        toast.info('Copied base64 text to clipboard.', { toastId: 'toast-copy-bintob64' });
     }
 
     render() {
